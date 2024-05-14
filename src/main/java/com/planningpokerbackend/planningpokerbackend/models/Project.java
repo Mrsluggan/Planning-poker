@@ -1,5 +1,5 @@
 package com.planningpokerbackend.planningpokerbackend.models;
 
-public class ProjectModel {
+public class Project {
     
 }
