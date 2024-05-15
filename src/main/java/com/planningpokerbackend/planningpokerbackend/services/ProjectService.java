@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.planningpokerbackend.planningpokerbackend.models.Project;
+import com.planningpokerbackend.planningpokerbackend.models.Task;
 
 @Service
 public class ProjectService {
@@ -34,6 +35,12 @@ public class ProjectService {
 
     public void deleteProject(String projectId) {
         Query query = new Query(Criteria.where("id").is(projectId));
-        mongoOperations.remove(query, Project.class);
+        Project projectToDelete = mongoOperations.findOne(query, Project.class);
+    
+        if (projectToDelete != null) {
+            mongoOperations.remove(projectToDelete);
+            Query tasksQuery = new Query(Criteria.where("projectId").is(projectId));
+            mongoOperations.remove(tasksQuery, Task.class);
+        }
     }
 }

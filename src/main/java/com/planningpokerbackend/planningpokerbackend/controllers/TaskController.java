@@ -48,11 +48,6 @@ public class TaskController {
         return taskservice.createNewTask(projectId, task);
     }
 
-    @DeleteMapping("/removeTask/{taskId}")
-    public void removeTask(@PathVariable("taskId") String id){
-       taskservice.removeTask(id);
-    }
-
     @PutMapping("/manageTaskTimer/{taskId}")
     public Task startTask(@PathVariable("taskId") String id) {
 
