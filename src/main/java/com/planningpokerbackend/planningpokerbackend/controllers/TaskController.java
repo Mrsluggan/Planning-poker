@@ -49,7 +49,7 @@ public class TaskController {
         return taskservice.createNewTask(id, task);
     }
 
-    @PutMapping("/handleTask/{taskId}")
+    @PutMapping("/manageTaskTimer/{taskId}")
     public Task startTask(@PathVariable("taskId") String id) {
 
         Task task = taskservice.getTaskById(id);
