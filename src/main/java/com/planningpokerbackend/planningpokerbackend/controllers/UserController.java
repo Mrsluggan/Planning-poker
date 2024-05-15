@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -31,4 +32,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/user/{id}")
+    public List <User> getUserById(@PathVariable String id) {
+        return userService.getUserById(id);
+    }
+
+    
 }
