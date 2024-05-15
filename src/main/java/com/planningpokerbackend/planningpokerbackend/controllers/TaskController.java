@@ -10,6 +10,7 @@ import com.planningpokerbackend.planningpokerbackend.services.UserService;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,11 @@ public class TaskController {
     @PostMapping("/newTask/{projectId}")
     public Task createNewTask(@PathVariable("projectId") String id, Task task) {
         return taskservice.createNewTask(id, task);
+    }
+
+    @DeleteMapping("/removeTask/{taskId}")
+    public void removeTask(@PathVariable("taskId") String id){
+       taskservice.removeTask(id);
     }
 
     @PutMapping("/manageTaskTimer/{taskId}")
