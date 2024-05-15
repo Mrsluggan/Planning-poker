@@ -41,9 +41,4 @@ public class UserController {
         return userService.registerUser(user.getUsername(), user.getPassword());
     }
 
-    @GetMapping("/newUser")
-    public User newUser(@RequestBody User user) {
-        return userService.newUser(user);
-    }
-
 }

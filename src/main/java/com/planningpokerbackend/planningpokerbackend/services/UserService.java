@@ -25,10 +25,6 @@ public class UserService {
         return mongoOperations.find(query, User.class);
     }
 
-    public User newUser(User user) {
-        return mongoOperations.save(user);
-    }
-
     public User getUsername(String username) {
         Query query = Query.query(Criteria.where("username").is(username));
         return mongoOperations.findOne(query,User.class);
