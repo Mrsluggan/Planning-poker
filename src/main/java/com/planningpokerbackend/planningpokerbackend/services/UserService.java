@@ -1,3 +1,4 @@
+
 package com.planningpokerbackend.planningpokerbackend.services;
 
 import java.util.List;
@@ -34,6 +35,11 @@ public class UserService {
         mongoOperations.save(user);
     }
 
+    public List<User> getAllUsersForProject(String projectId) {
+        Query query = Query.query(Criteria.where("projectId").is(projectId));
+        return mongoOperations.find(query, User.class);
+    }
+
     public String registerUser(String username, String password) {
         if(getUsername(username) == null) {
             User user = new User(username, password);
@@ -44,9 +50,17 @@ public class UserService {
         }
     }
 
+    public User login(String username, String password) {
+        User user = getUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
+    }
+
+
     public void deleteUser(String id) {
         Query query = Query.query(Criteria.where("id").is(id));
         mongoOperations.remove(query,User.class);
     }
 }
-
