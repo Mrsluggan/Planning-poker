@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public UserController( UserService userservice) {
+    public UserController(UserService userservice) {
         this.userService = userservice;
     }
 
@@ -31,19 +31,19 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/project/{id}")
+    public List <User> getAllUsersForProject(@PathVariable String id) {
+        return userService.getAllUsersForProject(id); 
+    }
+
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
         return userService.registerUser(user.getUsername(), user.getPassword());
     }
 
     @PostMapping("/login")
-    public Object login(@RequestBody User user) {
-        User existingUser = userService.getUsername(user.getUsername());
-        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
-            return existingUser;
-        } else {
-            return null;
-        }
+    public User login(@RequestBody User user) {
+        return userService.login(user.getUsername(), user.getPassword());
     }
 
     @DeleteMapping("/user/{id}")
