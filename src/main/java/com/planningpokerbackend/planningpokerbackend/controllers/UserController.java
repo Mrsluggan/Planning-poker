@@ -1,17 +1,15 @@
 package com.planningpokerbackend.planningpokerbackend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.planningpokerbackend.planningpokerbackend.models.User;
 import com.planningpokerbackend.planningpokerbackend.services.ProjectService;
 import com.planningpokerbackend.planningpokerbackend.services.TaskService;
 import com.planningpokerbackend.planningpokerbackend.services.UserService;
-
 import java.util.List;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @CrossOrigin(origins = "*")
@@ -38,7 +36,11 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    
+    @PostMapping("/register")
+    public String registerUser(@RequestBody User user) {
+        return userService.registerUser(user.getUsername(), user.getPassword());
+    }
+
     @GetMapping("/newUser")
     public User newUser(@RequestBody User user) {
         return userService.newUser(user);
