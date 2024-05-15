@@ -38,10 +38,15 @@ public class UserService {
         if(getUsername(username) == null) {
             User user = new User(username, password);
             createUser(user);
-            return "success";
+            return "Registrering lyckades";
         } else {
             return "Användarnamnet är upptaget";
         }
+    }
+
+    public void deleteUser(String id) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        mongoOperations.remove(query,User.class);
     }
 }
 
