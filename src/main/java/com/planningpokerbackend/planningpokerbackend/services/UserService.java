@@ -25,6 +25,12 @@ public class UserService {
         Query query = Query.query(Criteria.where("id").is(id));
         return mongoOperations.find(query, User.class);
     }
+
+    public User newUser(User user) {
+        return mongoOperations.save(user);
+    }
+
+    
 }
 
 
