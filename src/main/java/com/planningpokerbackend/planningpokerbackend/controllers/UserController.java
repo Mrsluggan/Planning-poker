@@ -1,14 +1,11 @@
 package com.planningpokerbackend.planningpokerbackend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.planningpokerbackend.planningpokerbackend.models.User;
 import com.planningpokerbackend.planningpokerbackend.services.ProjectService;
 import com.planningpokerbackend.planningpokerbackend.services.TaskService;
 import com.planningpokerbackend.planningpokerbackend.services.UserService;
-
 import java.util.List;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
