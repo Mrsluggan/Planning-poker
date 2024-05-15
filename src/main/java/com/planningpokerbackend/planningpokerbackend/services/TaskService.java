@@ -1,22 +1,23 @@
 package com.planningpokerbackend.planningpokerbackend.services;
 
 import java.util.List;
-
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
+import com.planningpokerbackend.planningpokerbackend.models.Project;
 import com.planningpokerbackend.planningpokerbackend.models.Task;
-import com.planningpokerbackend.planningpokerbackend.models.User;
+
 
 @Service
 public class TaskService {
 
     private final MongoOperations mongoOperations;
+    private final ProjectService projectService;
 
-    public TaskService(MongoOperations mongoOperations) {
+    public TaskService(MongoOperations mongoOperations, ProjectService projectService) {
         this.mongoOperations = mongoOperations;
+        this.projectService = projectService;
     }
 
     public List<Task> getAllTasks() {
@@ -34,11 +35,27 @@ public class TaskService {
 
     public Task createNewTask(String projectId, Task task) {
         task.setProjectId(projectId);
-        return mongoOperations.save(task);
+        Task savedTask = mongoOperations.save(task);
+        Project project = projectService.getProjectById(projectId);
+        if (project != null) {
+            project.getTasks().add(savedTask);
+            mongoOperations.save(project);
+        }
+        return savedTask;
     }
 
     public void removeTask(String taskId) {
-        mongoOperations.remove(getTaskById(taskId));
+        Task taskToRemove = getTaskById(taskId);
+        if (taskToRemove != null) {
+            String projectId = taskToRemove.getProjectId();
+            mongoOperations.remove(taskToRemove);
+            
+            Project project = projectService.getProjectById(projectId);
+            if (project != null) {
+                project.getTasks().removeIf(task -> task.getId().equals(taskId));
+                mongoOperations.save(project);
+            }
+        }
     }
 
     public Task startTask(String taskId) {
