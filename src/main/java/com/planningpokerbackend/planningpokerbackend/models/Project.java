@@ -1,5 +1,6 @@
 package com.planningpokerbackend.planningpokerbackend.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,8 +12,12 @@ public class Project {
     private String projectName;
     private List<Task> tasks;
 
+    public Project() {
+        this.tasks = new ArrayList<>();
+    }
     public Project(String projectName) {
         this.projectName = projectName;
+        this.tasks = new ArrayList<>();
     }
 
     public String getId() {

@@ -1,19 +1,18 @@
 package com.planningpokerbackend.planningpokerbackend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.planningpokerbackend.planningpokerbackend.models.Task;
 import com.planningpokerbackend.planningpokerbackend.services.ProjectService;
 import com.planningpokerbackend.planningpokerbackend.services.TaskService;
 import com.planningpokerbackend.planningpokerbackend.services.UserService;
-
 import java.util.List;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -45,8 +44,8 @@ public class TaskController {
     }
 
     @PostMapping("/newTask/{projectId}")
-    public Task createNewTask(@PathVariable("projectId") String id, Task task) {
-        return taskservice.createNewTask(id, task);
+    public Task createNewTask(@PathVariable("projectId") String projectId, @RequestBody Task task) {
+        return taskservice.createNewTask(projectId, task);
     }
 
     @PutMapping("/manageTaskTimer/{taskId}")
@@ -59,7 +58,11 @@ public class TaskController {
             return taskservice.stopTask(id);
 
         }
+    }
 
+    @DeleteMapping("/removeTask/{taskId}")
+    public void removeTask(@PathVariable("taskId") String id){
+       taskservice.removeTask(id);
     }
 
 }
