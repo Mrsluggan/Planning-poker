@@ -6,15 +6,18 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import com.planningpokerbackend.planningpokerbackend.models.Project;
 import com.planningpokerbackend.planningpokerbackend.models.User;
 
 @Service
 public class UserService {
     
     private final MongoOperations mongoOperations;
+    private final ProjectService projectService;
 
-    public UserService (MongoOperations mongoOperations) {
+    public UserService (MongoOperations mongoOperations, ProjectService projectService) {
         this.mongoOperations=mongoOperations;
+        this.projectService=projectService;
     }
 
     public List <User> getAllUsers() {
@@ -36,8 +39,8 @@ public class UserService {
     }
 
     public List<User> getAllUsersForProject(String projectId) {
-        Query query = Query.query(Criteria.where("projectId").is(projectId));
-        return mongoOperations.find(query, User.class);
+      Project project = projectService.getProjectById(projectId);
+      return project.getUsers();
     }
 
     public String registerUser(String username, String password) {

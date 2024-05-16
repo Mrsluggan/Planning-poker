@@ -19,13 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class TaskController {
 
     private TaskService taskservice;
-    private ProjectService projectService;
-    private UserService userservice;
 
-    public TaskController(TaskService taskservice, ProjectService projectService, UserService userservice) {
+    public TaskController(TaskService taskservice) {
         this.taskservice = taskservice;
-        this.projectService = projectService;
-        this.userservice = userservice;
     }
 
     @GetMapping("/getTasks")

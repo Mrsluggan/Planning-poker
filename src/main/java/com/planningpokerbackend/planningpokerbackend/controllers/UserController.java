@@ -1,7 +1,6 @@
 package com.planningpokerbackend.planningpokerbackend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.planningpokerbackend.planningpokerbackend.models.Project;
 import com.planningpokerbackend.planningpokerbackend.models.User;
 import com.planningpokerbackend.planningpokerbackend.services.ProjectService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -52,7 +50,7 @@ public class UserController {
         return userService.login(user.getUsername(), user.getPassword());
     }
 
-    @PostMapping("/{projectId}/{userId}")
+    @PostMapping("/joinProject/{projectId}/user/{userId}")
     public Project joinProject(@PathVariable String projectId, @PathVariable String userId) {
         User user = userService.getUserById(userId);
         return projectService.addUserToProject(projectId, user);
