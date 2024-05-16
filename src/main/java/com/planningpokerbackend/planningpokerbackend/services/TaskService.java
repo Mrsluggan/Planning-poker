@@ -40,13 +40,14 @@ public class TaskService {
     }
 
     public Task createNewTask(String projectId, Task task) {
+        Project project = projectService.getProjectById(projectId);
+        if (project == null) {
+            return null;
+        }
         task.setProjectId(projectId);
         Task savedTask = mongoOperations.save(task);
-        Project project = projectService.getProjectById(projectId);
-        if (project != null) {
-            project.getTasks().add(savedTask);
-            mongoOperations.save(project);
-        }
+        project.getTasks().add(savedTask);
+        mongoOperations.save(project);
         return savedTask;
     }
 

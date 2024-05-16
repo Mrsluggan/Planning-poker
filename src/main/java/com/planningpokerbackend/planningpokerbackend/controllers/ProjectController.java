@@ -22,13 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProjectController {
 
     private ProjectService projectService;
-    private UserService userService;
-    private TaskService taskservice;
 
-    public ProjectController(ProjectService projectService, UserService userService, TaskService taskservice) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.userService = userService;
-        this.taskservice = taskservice;
     }
 
     @PostMapping("/createproject")
