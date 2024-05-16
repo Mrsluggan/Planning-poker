@@ -77,6 +77,15 @@ public class TaskService {
         return mongoOperations.save(task);
     }
 
+    public Task updateTaskTimeEstimation(String taskId, String userId, int timeEstimation) {
+        Task task = getTaskById(taskId);
+        if (task != null) {
+            task.getUserTimeEstimations().put(userId, timeEstimation);
+            return mongoOperations.save(task);
+        }
+        return null;
+    }
+
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
     @PostConstruct
     public void startTimerUpdateTask() {

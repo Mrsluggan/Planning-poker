@@ -1,5 +1,8 @@
 package com.planningpokerbackend.planningpokerbackend.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +15,7 @@ public class Task {
     private long totalTime;
     private long startTime; 
     private boolean timerRunning;
+    private Map<String, Integer> userTimeEstimations;
     
     public Task(String name, String projectId) {
         this.name = name;
@@ -19,8 +23,25 @@ public class Task {
         this.totalTime = 0;
         this.startTime = 0;
         this.timerRunning = false;
+        this.userTimeEstimations = new HashMap<>();
     }
     
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Map<String, Integer> getUserTimeEstimations() {
+        return userTimeEstimations;
+    }
+
+    public void setUserTimeEstimations(Map<String, Integer> userTimeEstimations) {
+        this.userTimeEstimations = userTimeEstimations;
+    }
+
     public String getId() {
         return id;
     }
