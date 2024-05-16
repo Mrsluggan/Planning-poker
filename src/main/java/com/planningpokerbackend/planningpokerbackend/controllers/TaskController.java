@@ -61,4 +61,9 @@ public class TaskController {
        taskservice.removeTask(id);
     }
 
+    @PostMapping("/timeEstimation/{taskId}/{userId}/{timeEstimation}")
+    public Task updateTaskTimeEstimation(@PathVariable("taskId") String taskId, @PathVariable("userId") String userId, @PathVariable("timeEstimation") int timeEstimation) {
+        return taskservice.updateTaskTimeEstimation(taskId, userId, timeEstimation);
+    }
+
 }
