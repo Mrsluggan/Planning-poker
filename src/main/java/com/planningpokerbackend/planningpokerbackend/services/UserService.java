@@ -21,9 +21,9 @@ public class UserService {
         return mongoOperations.findAll(User.class);
     }
 
-    public List <User> getUserById(String id) {
+    public User getUserById(String id) {
         Query query = Query.query(Criteria.where("id").is(id));
-        return mongoOperations.find(query, User.class);
+        return mongoOperations.findOne(query, User.class);
     }
 
     public User getUsername(String username) {

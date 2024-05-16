@@ -1,14 +1,13 @@
 package com.planningpokerbackend.planningpokerbackend.services;
 
 import java.util.List;
-
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.planningpokerbackend.planningpokerbackend.models.Project;
 import com.planningpokerbackend.planningpokerbackend.models.Task;
+import com.planningpokerbackend.planningpokerbackend.models.User;
 
 @Service
 public class ProjectService {
@@ -31,6 +30,15 @@ public class ProjectService {
     public Project getProjectById(String projectId) {
         Query query = new Query(Criteria.where("id").is(projectId));
         return mongoOperations.findOne(query, Project.class);
+    }
+
+    public Project addUserToProject(String projectId, User user) {
+        Project project = getProjectById(projectId);
+        if (project != null && user != null) {
+            project.addUser(user);
+            mongoOperations.save(project);
+        }
+        return project;
     }
 
     public void deleteProject(String projectId) {
