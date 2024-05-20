@@ -11,13 +11,16 @@ public class Project {
     private String id;
     private String projectName;
     private List<Task> tasks;
+    private List<User> users;
 
     public Project() {
         this.tasks = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
     public Project(String projectName) {
         this.projectName = projectName;
         this.tasks = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
 
     public String getId() {
@@ -46,6 +49,18 @@ public class Project {
 
     public void addTask(Task task) {
         this.tasks.add(task);
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+    
+    public void addUser(User user) {
+        this.users.add(user);
     }
 }
 

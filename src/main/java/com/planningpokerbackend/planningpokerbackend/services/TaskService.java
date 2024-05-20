@@ -1,12 +1,18 @@
 package com.planningpokerbackend.planningpokerbackend.services;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.planningpokerbackend.planningpokerbackend.models.Project;
 import com.planningpokerbackend.planningpokerbackend.models.Task;
+
+import jakarta.annotation.PostConstruct;
 
 
 @Service
@@ -34,13 +40,14 @@ public class TaskService {
     }
 
     public Task createNewTask(String projectId, Task task) {
+        Project project = projectService.getProjectById(projectId);
+        if (project == null) {
+            return null;
+        }
         task.setProjectId(projectId);
         Task savedTask = mongoOperations.save(task);
-        Project project = projectService.getProjectById(projectId);
-        if (project != null) {
-            project.getTasks().add(savedTask);
-            mongoOperations.save(project);
-        }
+        project.getTasks().add(savedTask);
+        mongoOperations.save(project);
         return savedTask;
     }
 
@@ -68,5 +75,28 @@ public class TaskService {
         Task task = getTaskById(taskId);
         task.pauseTimer();
         return mongoOperations.save(task);
+    }
+
+    public Task updateTaskTimeEstimation(String taskId, String userId, int timeEstimation) {
+        Task task = getTaskById(taskId);
+        if (task != null) {
+            task.getUserTimeEstimations().put(userId, timeEstimation);
+            return mongoOperations.save(task);
+        }
+        return null;
+    }
+
+    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    @PostConstruct
+    public void startTimerUpdateTask() {
+        executorService.scheduleAtFixedRate(this::updateTimers, 0, 1, TimeUnit.MINUTES);
+    }
+
+    private void updateTimers() {
+        List<Task> tasks = getAllTasks();
+        for (Task task : tasks) {
+            task.updateTimer();
+            mongoOperations.save(task);
+        }
     }
 }

@@ -19,13 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class TaskController {
 
     private TaskService taskservice;
-    private ProjectService projectService;
-    private UserService userservice;
 
-    public TaskController(TaskService taskservice, ProjectService projectService, UserService userservice) {
+    public TaskController(TaskService taskservice) {
         this.taskservice = taskservice;
-        this.projectService = projectService;
-        this.userservice = userservice;
     }
 
     @GetMapping("/getTasks")
@@ -63,6 +59,11 @@ public class TaskController {
     @DeleteMapping("/removeTask/{taskId}")
     public void removeTask(@PathVariable("taskId") String id){
        taskservice.removeTask(id);
+    }
+
+    @PostMapping("/timeEstimation/{taskId}/{userId}/{timeEstimation}")
+    public Task updateTaskTimeEstimation(@PathVariable("taskId") String taskId, @PathVariable("userId") String userId, @PathVariable("timeEstimation") int timeEstimation) {
+        return taskservice.updateTaskTimeEstimation(taskId, userId, timeEstimation);
     }
 
 }
