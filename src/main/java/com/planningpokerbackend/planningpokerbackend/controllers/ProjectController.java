@@ -27,7 +27,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping("/createproject")
+    @PostMapping("/createProject")
     public Project createProject(@RequestBody Project project) {
         return projectService.createProject(project);
     }
