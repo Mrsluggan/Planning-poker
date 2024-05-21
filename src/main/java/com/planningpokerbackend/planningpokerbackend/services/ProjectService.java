@@ -34,7 +34,7 @@ public class ProjectService {
 
     public Project addUserToProject(String projectId, User user) {
         Project project = getProjectById(projectId);
-        if (project != null && user != null) {
+        if (project != null && user != null && !project.getUsers().contains(user))  {
             project.addUser(user);
             mongoOperations.save(project);
         }
