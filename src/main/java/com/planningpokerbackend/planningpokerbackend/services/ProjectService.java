@@ -41,6 +41,15 @@ public class ProjectService {
         return project;
     }
 
+    public Project removeUserFromProject(String projectId, User user) {
+        Project project = getProjectById(projectId);
+        if (project != null && user != null) {
+            project.removeUser(user);
+            mongoOperations.save(project);
+        }
+        return project;
+    }
+
     public void deleteProject(String projectId) {
         Query query = new Query(Criteria.where("id").is(projectId));
         Project projectToDelete = mongoOperations.findOne(query, Project.class);

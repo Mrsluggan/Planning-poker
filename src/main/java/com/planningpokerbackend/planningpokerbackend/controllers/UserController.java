@@ -56,6 +56,13 @@ public class UserController {
         return projectService.addUserToProject(projectId, user);
     }
 
+    @PostMapping("/leaveProject/{projectId}/user/{userId}")
+    public Project leaveProject(@PathVariable String projectId, @PathVariable String userId) {
+        User user = userService.getUserById(userId);
+        return projectService.removeUserFromProject(projectId, user);
+    }
+
+
     @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
