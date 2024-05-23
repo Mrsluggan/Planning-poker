@@ -14,7 +14,6 @@ import com.planningpokerbackend.planningpokerbackend.models.Task;
 
 import jakarta.annotation.PostConstruct;
 
-
 @Service
 public class TaskService {
 
@@ -56,7 +55,7 @@ public class TaskService {
         if (taskToRemove != null) {
             String projectId = taskToRemove.getProjectId();
             mongoOperations.remove(taskToRemove);
-            
+
             Project project = projectService.getProjectById(projectId);
             if (project != null) {
                 project.getTasks().removeIf(task -> task.getId().equals(taskId));
@@ -80,29 +79,37 @@ public class TaskService {
     public Task updateTaskTimeEstimation(String taskId, String userId, int timeEstimation) {
         Task task = getTaskById(taskId);
         if (task != null) {
-            
-            task.getUserTimeEstimations().put(userId, timeEstimation);
-            Task savedTask = mongoOperations.save(task);
+            if (!task.getUserTimeEstimations().containsKey(userId)) {
+                task.getUserTimeEstimations().put(userId, timeEstimation);
 
-            
-            Project project = projectService.getProjectById(task.getProjectId());
-            if (project != null) {
-                
-                for (Task projectTask : project.getTasks()) {
-                    if (projectTask.getId().equals(taskId)) {
-                        projectTask.getUserTimeEstimations().put(userId, timeEstimation);
-                        break;
+                task.setTimeEstimation(task.getTimeEstimation() + timeEstimation);
+
+                int medianValue = task.getTimeEstimation() / task.getUserTimeEstimations().size();
+
+                System.out.println(medianValue);
+                Task savedTask = mongoOperations.save(task);
+
+                Project project = projectService.getProjectById(task.getProjectId());
+                if (project != null) {
+
+                    for (Task projectTask : project.getTasks()) {
+                        if (projectTask.getId().equals(taskId)) {
+                            projectTask.getUserTimeEstimations().put(userId, timeEstimation);
+                            break;
+                        }
                     }
+
+                    mongoOperations.save(project);
                 }
-                
-                mongoOperations.save(project);
+                return savedTask;
             }
-            return savedTask;
+
         }
         return null;
     }
 
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
     @PostConstruct
     public void startTimerUpdateTask() {
         executorService.scheduleAtFixedRate(this::updateTimers, 0, 1, TimeUnit.MINUTES);
