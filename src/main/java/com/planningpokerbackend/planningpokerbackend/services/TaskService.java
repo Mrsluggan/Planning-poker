@@ -1,6 +1,8 @@
 package com.planningpokerbackend.planningpokerbackend.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -8,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.planningpokerbackend.planningpokerbackend.models.Project;
 import com.planningpokerbackend.planningpokerbackend.models.Task;
@@ -76,9 +80,10 @@ public class TaskService {
         return mongoOperations.save(task);
     }
 
-    public Task updateTaskTimeEstimation(String taskId, String userId, int timeEstimation) {
+    public ResponseEntity<Task> updateTaskTimeEstimation(String taskId, String userId, int timeEstimation) {
         Task task = getTaskById(taskId);
         if (task != null) {
+
             if (!task.getUserTimeEstimations().containsKey(userId)) {
                 task.getUserTimeEstimations().put(userId, timeEstimation);
 
@@ -101,7 +106,10 @@ public class TaskService {
 
                     mongoOperations.save(project);
                 }
-                return savedTask;
+                return ResponseEntity.ok().body(savedTask);
+            } else {
+
+                return ResponseEntity.status(409).body(task);
             }
 
         }
