@@ -70,14 +70,34 @@ public class TaskService {
 
     public Task startTask(String taskId) {
         Task task = getTaskById(taskId);
-        task.startTimer();
-        return mongoOperations.save(task);
+        task.startTimer(); 
+        Task updatedTask = mongoOperations.save(task);
+        updateProjectWithTask(updatedTask);
+        return updatedTask;
     }
 
     public Task stopTask(String taskId) {
         Task task = getTaskById(taskId);
         task.pauseTimer();
-        return mongoOperations.save(task);
+        Task updatedTask = mongoOperations.save(task);
+        updateProjectWithTask(updatedTask);
+        return updatedTask;
+    }
+
+    private void updateProjectWithTask(Task updatedTask) {
+        String projectId = updatedTask.getProjectId();
+        Project project = projectService.getProjectById(projectId);
+    
+        if (project != null) {
+            List<Task> tasks = project.getTasks();
+            for (int i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).getId().equals(updatedTask.getId())) {
+                    tasks.set(i, updatedTask);
+                    break;
+                }
+            }
+            mongoOperations.save(project);
+        }
     }
 
     public ResponseEntity<Task> updateTaskTimeEstimation(String taskId, String userId, int timeEstimation) {
