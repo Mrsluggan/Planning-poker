@@ -11,11 +11,11 @@ import com.planningpokerbackend.planningpokerbackend.models.User;
 
 @Service
 public class ProjectService {
-    
+
     private final MongoOperations mongoOperations;
 
-    public ProjectService (MongoOperations mongoOperations) {
-        this.mongoOperations=mongoOperations;
+    public ProjectService(MongoOperations mongoOperations) {
+        this.mongoOperations = mongoOperations;
     }
 
     public Project createProject(Project project) {
@@ -24,7 +24,12 @@ public class ProjectService {
     }
 
     public List<Project> getAllProjects() {
-       return mongoOperations.findAll(Project.class);
+        return mongoOperations.findAll(Project.class);
+    }
+
+    public List<Project> getAllProjectsByUserId(String userId) {
+        Query query = new Query(Criteria.where("users._id").is(userId));
+        return mongoOperations.find(query, Project.class);
     }
 
     public Project getProjectById(String projectId) {
@@ -34,7 +39,7 @@ public class ProjectService {
 
     public Project addUserToProject(String projectId, User user) {
         Project project = getProjectById(projectId);
-        if (project != null && user != null && !project.getUsers().contains(user))  {
+        if (project != null && user != null && !project.getUsers().contains(user)) {
             project.addUser(user);
             mongoOperations.save(project);
         }
@@ -53,7 +58,7 @@ public class ProjectService {
     public void deleteProject(String projectId) {
         Query query = new Query(Criteria.where("id").is(projectId));
         Project projectToDelete = mongoOperations.findOne(query, Project.class);
-    
+
         if (projectToDelete != null) {
             mongoOperations.remove(projectToDelete);
             Query tasksQuery = new Query(Criteria.where("projectId").is(projectId));
