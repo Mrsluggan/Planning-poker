@@ -27,7 +27,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping("/createproject")
+    @PostMapping("/createProject")
     public Project createProject(@RequestBody Project project) {
         return projectService.createProject(project);
     }
@@ -41,7 +41,10 @@ public class ProjectController {
     public Project getProjectById(@PathVariable String projectId) {
         return projectService.getProjectById(projectId);
     }
-
+    @GetMapping("/projects/{userId}/projects")
+    public List<Project> getProjectByUserId(@PathVariable String userId) {
+        return projectService.getAllProjectsByUserId(userId);
+    }
     @DeleteMapping("/projects/{projectId}")
     public void deleteProject(@PathVariable String projectId) {
         projectService.deleteProject(projectId);

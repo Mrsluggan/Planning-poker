@@ -6,6 +6,8 @@ import com.planningpokerbackend.planningpokerbackend.services.ProjectService;
 import com.planningpokerbackend.planningpokerbackend.services.TaskService;
 import com.planningpokerbackend.planningpokerbackend.services.UserService;
 import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,8 +64,14 @@ public class TaskController {
     }
 
     @PostMapping("/timeEstimation/{taskId}/{userId}/{timeEstimation}")
-    public Task updateTaskTimeEstimation(@PathVariable("taskId") String taskId, @PathVariable("userId") String userId, @PathVariable("timeEstimation") int timeEstimation) {
+    public ResponseEntity<Task> updateTaskTimeEstimation(@PathVariable("taskId") String taskId, @PathVariable("userId") String userId, @PathVariable("timeEstimation") int timeEstimation) {
+
         return taskservice.updateTaskTimeEstimation(taskId, userId, timeEstimation);
     }
+
+
+
+
+
 
 }

@@ -62,5 +62,9 @@ public class Project {
     public void addUser(User user) {
         this.users.add(user);
     }
+
+    public void removeUser(User user) {
+        this.users.removeIf(u -> u.getId().equals(user.getId()));
+    }
 }
 

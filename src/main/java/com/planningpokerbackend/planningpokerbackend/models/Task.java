@@ -6,26 +6,28 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="Tasks")
+@Document(collection = "Tasks")
 public class Task {
     @Id
     private String id;
     private String name;
     private String projectId;
     private long totalTime;
-    private long startTime; 
+    private long startTime;
+    private int timeEstimation;
     private boolean timerRunning;
     private Map<String, Integer> userTimeEstimations;
-    
+
     public Task(String name, String projectId) {
         this.name = name;
-        this.projectId=projectId;
+        this.projectId = projectId;
         this.totalTime = 0;
         this.startTime = 0;
+        this.timeEstimation = 0;
         this.timerRunning = false;
         this.userTimeEstimations = new HashMap<>();
     }
-    
+
     public long getStartTime() {
         return startTime;
     }
@@ -65,7 +67,7 @@ public class Task {
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
-    
+
     public long getTotalTime() {
         return totalTime;
     }
@@ -91,10 +93,10 @@ public class Task {
 
     public void pauseTimer() {
         if (timerRunning) {
-            long currentTime = System.currentTimeMillis()/ 60000;
+            long currentTime = System.currentTimeMillis() / 60000;
             totalTime += (currentTime - startTime);
-            startTime = 0; 
-            timerRunning = false; 
+            startTime = 0;
+            timerRunning = false;
         }
     }
 
@@ -105,5 +107,13 @@ public class Task {
             startTime = currentTime;
         }
     }
-}
 
+    public int getTimeEstimation() {
+        return timeEstimation;
+    }
+
+    public void setTimeEstimation(int timeEstimation) {
+        this.timeEstimation = timeEstimation;
+    }
+
+}
