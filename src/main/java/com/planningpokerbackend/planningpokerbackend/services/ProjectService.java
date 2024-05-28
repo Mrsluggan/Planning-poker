@@ -34,7 +34,20 @@ public class ProjectService {
 
     public Project getProjectById(String projectId) {
         Query query = new Query(Criteria.where("id").is(projectId));
-        return mongoOperations.findOne(query, Project.class);
+        Project project = mongoOperations.findOne(query, Project.class);
+
+        if (projectId!=null) {
+            List<Task> updatedTasks = getUpdatedTasksForProject(projectId);
+            project.setTasks(updatedTasks);
+        } else {
+            return null;
+        }
+        return project;
+    }
+
+    private List<Task> getUpdatedTasksForProject(String projectId) {
+        Query query = new Query(Criteria.where("projectId").is(projectId));
+        return mongoOperations.find(query, Task.class);
     }
 
     public Project addUserToProject(String projectId, User user) {
